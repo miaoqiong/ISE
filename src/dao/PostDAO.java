@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sun.jmx.snmp.Timestamp;
+
 import entity.*;
 
 
@@ -15,7 +17,7 @@ public class PostDAO {
 	//for debugging purpose
 	
 		public static void main(String[] args){
-			System.out.println("ssss");
+		/*	System.out.println("ssss");
 			PostDAO pd = new PostDAO();
 			HashMap<Integer, Post> map = pd.retrieveAll();
 		    //System.out.println(map.size());
@@ -28,9 +30,8 @@ public class PostDAO {
 			for (Integer key : aMap.keySet()) {
 			    System.out.println(key + " " + aMap.get(key) + " " +aMap.get(key).getAvatar_id() +"   "+ aMap.get(key).getParent_id());
 			}
-            
-			System.out.println("Max : " + pd.lastPostID(1));
-	
+
+	*/
 		}
 	
 		private static final String TBLNAME = "post";
@@ -46,7 +47,7 @@ public class PostDAO {
 	        throw new RuntimeException(msg, ex);
 	    }
 	    
-	    // retrieve all parent post  -> display in forumHome.jsp
+	    
 	    public HashMap<Integer, Post> retrieveAll() {
 	        HashMap<Integer, Post> postMap = new HashMap<>();
 
@@ -98,7 +99,6 @@ public class PostDAO {
 	        }
 	    }
 	    
-	    // retrieve parent post and its subpost (if any) -> for viewPost.jsp
 	    public HashMap<Integer, Post> retrieveAPost(int parentID) {
 	        HashMap<Integer, Post> postMap = new HashMap<>();
 
@@ -137,10 +137,8 @@ public class PostDAO {
 	             
 	            	tempPost = new Post(avatar_id, parent_id, level, post_id, post_title, post_content, is_question, is_bot, is_qa_bountiful, timestamp, time_limit_qa, time_limit_bot, qa_coin_basic, qa_coin_bounty, thoughfulness_score,
 	            		 no_show, previous_version, number_of_upvotes, number_of_downvotes);
-	            	
-	            	System.out.println(tempPost);	       
+	                  
 	                postMap.put(post_id, tempPost);
-	                System.out.println(postMap.size());
 	                
 	            }
 	        } catch (SQLException e) {
@@ -151,88 +149,6 @@ public class PostDAO {
 	        }
 	    }
 	    
-	    // retrieve Parent post -> for viewPost.jsp	    
-	    public Post retrieveParentPost(int parentID) {
-	        Connection conn = null;
-	        PreparedStatement stmt = null;
-	        String sql = "";
-	        Post returnPost = null;
-	        ResultSet rs = null;
-
-	        try {
-	            conn = ConnectionManager.getConnection();
-
-	            sql = "select * from " + TBLNAME + " where parent_id = ? and parent_id = post_id";
-	            stmt = conn.prepareStatement(sql);	
-	            stmt.setInt(1, parentID);
-	            
-	            rs = stmt.executeQuery();
-
-	            while (rs.next()) {
-	            	int avatar_id = rs.getInt(1);
-	            	int parent_id = rs.getInt(2);
-	            	int level = rs.getInt(3);
-	            	int post_id = rs.getInt(4);
-	            	String post_title = rs.getString(5);
-	            	String post_content = rs.getString(6);
-	            	boolean is_question = rs.getBoolean(7);
-	            	boolean is_bot = rs.getBoolean(8);
-	            	boolean is_qa_bountiful = rs.getBoolean(9);
-	            	String timestamp = rs.getString(10);
-	            	int time_limit_qa = rs.getInt(11);
-	            	int time_limit_bot = rs.getInt(12);
-	            	float qa_coin_basic = rs.getFloat(13);
-	            	float qa_coin_bounty = rs.getFloat(14);
-	            	float thoughfulness_score = rs.getFloat(15);
-	            	boolean no_show = rs.getBoolean(16);
-	            	int previous_version = rs.getInt(17);
-	            	int number_of_upvotes = rs.getInt(18);
-	            	int number_of_downvotes = rs.getInt(19);
-
-	             
-	            	returnPost = new Post(avatar_id, parent_id, level, post_id, post_title, post_content, is_question, is_bot, is_qa_bountiful, timestamp, time_limit_qa, time_limit_bot, qa_coin_basic, qa_coin_bounty, thoughfulness_score,
-	            		 no_show, previous_version, number_of_upvotes, number_of_downvotes);
-	            }
-	            //return resultUser;
-
-	        } catch (SQLException ex) {
-	            handleSQLException(ex, sql, "Post={" + returnPost + "}");
-	        } finally {
-	            ConnectionManager.close(conn, stmt, rs);
-	        }
-	        return returnPost;
-	    }
-	    
-	    public int lastPostID(int parentID){
-	    Connection conn = null;
-        PreparedStatement stmt = null;
-        String sql = "";
-        Integer returnPostID = null;
-        ResultSet rs = null;
-
-        try {
-            conn = ConnectionManager.getConnection();
-
-            sql = "select MAX(post_id) FROM " + TBLNAME + " where parent_id = ?";
-            stmt = conn.prepareStatement(sql);	         
-            stmt.setInt(1, parentID);
-            
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {            	
-            	returnPostID = rs.getInt(1);
-             
-            	
-            }
-            //return resultUser;
-
-        } catch (SQLException ex) {
-            handleSQLException(ex, sql, "PostID={" + returnPostID + "}");
-        } finally {
-            ConnectionManager.close(conn, stmt, rs);
-        }
-        return returnPostID;
-    }
 	    public int lastPostID(){
 	        Connection conn = null;
 	          PreparedStatement stmt = null;
@@ -312,5 +228,6 @@ public class PostDAO {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Timestamp(today.getTime());
 	  }	
+	    
 
 }
