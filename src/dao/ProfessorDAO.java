@@ -41,7 +41,7 @@ public class ProfessorDAO {
 	        try {
 	            conn = ConnectionManager.getConnection();
 
-	            sql = "select smu_email, password,avatar_id from " + TBLNAME + " where smu_email_id = ? and password = SHA1(?)";
+	            sql = "select smu_email, password from " + TBLNAME + " where smu_email_id = ? and password = SHA1(?)";
 	            stmt = conn.prepareStatement(sql);
 	            stmt.setString(1, emailID);
 	            stmt.setString(2, password);
@@ -51,9 +51,8 @@ public class ProfessorDAO {
 	            while (rs.next()) {
 	                String prof_smu_email = rs.getString(1);
 	                String correctPassword = rs.getString(2);
-	                int avatar_id = Integer.parseInt(rs.getString(3));
-	                
-	                returnProfessor = new Professor(prof_smu_email,correctPassword,avatar_id);
+	             
+	                returnProfessor = new Professor(prof_smu_email,correctPassword);
 	            }
 	            //return resultUser;
 
@@ -75,7 +74,7 @@ public class ProfessorDAO {
 	        try {
 	            conn = ConnectionManager.getConnection();
 
-	            sql = "select smu_email, password,avatar_id from " + TBLNAME + " where smu_email_id = ? ";
+	            sql = "select smu_email, password from " + TBLNAME + " where smu_email_id = ? ";
 	            stmt = conn.prepareStatement(sql);
 	            stmt.setString(1, emailID);
 
@@ -84,8 +83,7 @@ public class ProfessorDAO {
 	            while (rs.next()) {
 	                String prof_smu_email = rs.getString(1);
 	                String correctPassword = rs.getString(2);
-	                int avatar_id = Integer.parseInt(rs.getString(3));
-	                returnProfessor = new Professor(prof_smu_email,correctPassword,avatar_id);
+	                returnProfessor = new Professor(prof_smu_email,correctPassword);
 	            }
 	            //return resultUser;
 
@@ -102,7 +100,7 @@ public class ProfessorDAO {
 	        }
 	    }
 	    
-	    public String registerProfessor(String email,String password,int avatar_id){
+	    public String registerProfessor(String email,String password){
 	    	String msg = "";
 	    	Connection conn = null;
 		    PreparedStatement stmt = null;
@@ -113,16 +111,14 @@ public class ProfessorDAO {
 		    	msg = "email already exists!";
 		    	return msg;
 		    }
-	
 		    
 		    try {
 		    	conn = ConnectionManager.getConnection();
-		    	sql = "insert into professor (smu_email, smu_email_id,avatar_id,password) values (?,?,?,SHA1(?))";
+		    	sql = "insert into professor (smu_email, smu_email_id,password) values (?,?,SHA1(?))";
 		        stmt = conn.prepareStatement(sql);
 		        stmt.setString(1, email);
 		        stmt.setString(2,emailID);
-		        stmt.setInt(3,avatar_id);
-		        stmt.setString(4, password);  
+		        stmt.setString(3, password);  
 		        stmt.executeUpdate();
 
 	        } catch (SQLException ex) {

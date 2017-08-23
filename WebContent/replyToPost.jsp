@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page
 	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,6 +13,7 @@
 
 <link rel="stylesheet" href="style/css/bootstrap.min.css">
 <link rel="stylesheet" href="style/css/font-awesome.min.css">
+<link rel="stylesheet" href="style/css/forumHomePageLayout.css">
 
 </head>
 <body>
@@ -41,57 +42,76 @@
 
 	<%
 	   
-	 String tempID = request.getParameter("parent_id");
-     int parentID = Integer.parseInt(tempID);
+	 String tempID = request.getParameter("post_id");
+     int postID = Integer.parseInt(tempID);
 
 	 PostDAO pd = new PostDAO();
- 	 Post parentPost = pd.retrieveParentPost(parentID);
+ 	 Post parentPost = pd.retrieveParentPost(postID);
 		
- 	 int lastPostID = pd.lastPostID(parentID);
+ 	 int lastPostID = pd.lastPostID(postID);
+ 	 
+ 	String errorMsgs = (String) request.getAttribute("replyToPost");
+	
 	
 	%>
 	<div style="margin-top: 2%"></div>
 	<div class="container text-center">
 		<header>
-			<h2>CAT Forum</h2>
+			<h2>Reply to a Post</h2>
 			<hr>
 		</header>
-		
-		<form name="replyForm" method="post" action="ReplyToPost" >
-                </br>
-                <table cellspacing="2" cellpadding="0">
-                           <tr>
-                        <td>
-                        <input type ="text" name="parentID" value="<%=parentID%>" hidden/>
-                            <input type ="text" name="postID" value="<%=lastPostID+1%>" hidden/>
-                        </td>
-                    </tr>
-                    <tr>
-                    <th>
-                            <label>Post Title</label>
-                        </th>
-                        <td>
-                   
-                            <input type ="text" name="postTitle" value="<%=parentPost.getPost_title()%>" readonly/>
-                        </td>
-                    </tr>
-                    <tr>
-                    
-                        <th>
-                            <label>Post Content</label>
-                        </th>
-                        <td><textarea rows="4" cols="50" name="postContent" placeholder="Enter your reply here...">
-</textarea>
-                            </tr>
-                  <tr>
-                        <td colspan="2"><input type="submit" value="Submit"></td>
-                    </tr>
+
+		 <div class = "viewPostBoarder"  >
+ <br>
+    <div class="container">
     
-                    </table>
-                    </form>
+        <%
+    
+    if (errorMsgs != null && errorMsgs.length() > 0) {
+		out.println("<div class='container' align='center' style='padding:0px;height:40px'>");
+		out.println("<div class='alert alert-warning' style='width:400px'>");
+		out.println("<font color='red'>");
+		out.println(errorMsgs);
+		out.println("</font>");
+		out.println("</div>");
+		out.println("</div><br>	");
+	}
+	request.removeAttribute("replyToPost");
+	
+
+    	%>
+
+  <form name="replyForm" method="post" action="ReplyToPost">
+  <input type="text" name="postID" value="<%=postID%>" hidden />
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-2 col-form-label"><strong>Post Title</strong></label>
+      <div class="col-sm-9">
+        <input type="text" name="postTitle" class="form-control" id="inputEmail3"
+						value="<%=parentPost.getPost_title()%>" readonly />                
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-2 col-form-label"><strong>Post Content</strong></label>
+      <div class="col-sm-9">
+        <textarea  name="postContent" class="form-control" id="inputEmail3" placeholder = "Enter your reply here"></textarea>
+
+      </div>
+    </div>
+    
+        <div class="form-group row">
+      <div class="offset-sm-2 col-sm-8">
+      
+        <input type="submit" class="btn btn-primary"value="Submit">
+      </div>
+    </div>
+  </form>
+</div>
+  </div> 
 
 
-		
+
+
+
 	</div>
 
 	<script

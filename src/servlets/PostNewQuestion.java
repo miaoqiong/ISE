@@ -55,6 +55,9 @@ public class PostNewQuestion extends HttpServlet {
 			return;
 		}else{
 			postDAO.addNewPost(avatar_id, post_title, post_content);
+			RequestDispatcher rd = request.getRequestDispatcher("forumHome.jsp");
+			rd.forward(request, response);
+			return;
 		}
 		
 		

@@ -30,12 +30,33 @@ public class ReplyToPost extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-	    String tempParentID = request.getParameter("parentID");
-		String tempPostID = request.getParameter("postID");
+		int avatar_id = 1;
+		String tempPostID = (String)request.getParameter("postID");
+		int post_id = Integer.parseInt(tempPostID);
 		String tempPostTitle = request.getParameter("postTitle");
 		String tempPostContent = request.getParameter("postContent");
 		
-		System.out.println(tempPostID +" "+ tempPostTitle+" "+tempPostContent);
+        
+		String errorMsg = "";
+		PostDAO postDAO = new PostDAO();
+		
+		//System.out.println(post_id +" "+ tempPostTitle+" "+tempPostContent);
+		
+			
+		if(tempPostContent.isEmpty()||tempPostContent == null){
+			errorMsg = "Your reply content cannot be empty!";
+			RequestDispatcher rd = request.getRequestDispatcher("replyToPost.jsp?post_id="+post_id);
+			request.setAttribute("replyToPost", errorMsg);
+			rd.forward(request, response);
+			return;
+		}else{
+			postDAO.replyToPost(avatar_id, post_id, tempPostTitle, tempPostContent);
+			RequestDispatcher rd = request.getRequestDispatcher("viewPost.jsp?post_id="+post_id);
+			rd.forward(request, response);
+			return;
+		}
+
+		
 
 	}
 

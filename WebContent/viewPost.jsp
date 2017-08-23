@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page
 	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,6 +13,7 @@
 
 <link rel="stylesheet" href="style/css/bootstrap.min.css">
 <link rel="stylesheet" href="style/css/font-awesome.min.css">
+<link rel="stylesheet" href="style/css/forumHomePageLayout.css">
 
 </head>
 <body>
@@ -40,14 +41,15 @@
 
 
 	<%
-		String tempID = request.getParameter("parent_id");
-		int parentID = Integer.parseInt(tempID);
+		String tempID = request.getParameter("post_id");
+	System.out.println(tempID);
+		int postID = Integer.parseInt(tempID);
 
 		PostDAO pd = new PostDAO();
 		// retrieve all posts that have same parent ID
-		HashMap<Integer, Post> map = pd.retrieveAPost(parentID);
+		HashMap<Integer, Post> map = pd.retrieveAPost(postID);
 
-		Post parentPost = pd.retrieveParentPost(parentID);
+		Post parentPost = pd.retrieveParentPost(postID);
 	%>
 	<div style="margin-top: 2%"></div>
 	<div class="container text-center">
@@ -56,50 +58,66 @@
 				View Post:
 				<%=parentPost.getPost_title()%></h2>
 			<hr>
-			<h3>
-				Post Title:
-				<%=parentPost.getPost_id()%> &nbsp;
-				<%=parentPost.getPost_title()%></h3>
+		
 			<h3>
 				Post Content:
 				<%=parentPost.getPost_content()%>
 			</h3>
 		</header>
+   </div>
+ 
+   	<div class="row justify-content-md-center">
 
-		<a href="#"><b>Reply</b></a></br> <br>
 
-		<table cellspacing="2" cellpadding="0" class="table_">
+		<div class="col-12 col-md-auto">
 
-			<tr>
-				<th>Avatar Name</th>
+			<div class="row">
+				<div class="col-3">
+					<a class="btn btn-primary" style="width: 6rem" href="replyToPost.jsp?post_id=<%=parentPost.getPost_id()%>"><b>Reply</b></a>
+				</div>
+
+			</div>
+			<div class="scroll">
+
+				<table class="table table-bordered">
+					<thead class="thead-default">
+
+						<tr>
+							<th>Avatar Name</th>
 				<th>Post Content</th>
 				<th>Datetime</th>
 				<th>Editing Options</th>
 
-			</tr>
-			<%
-				for (Integer key : map.keySet()) {
-					Post post = map.get(key);
+						</tr>
+						<%
+						for (Integer key : map.keySet()) {
+							Post post = map.get(key);
 
-					if (post.getPost_id() != parentID) {
-			%>
-			<tr>
-				<td><%=post.getAvatar_id()%></td>
+							if (post.isIs_question()== false) {
+						%>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td><%=post.getAvatar_id()%></td>
 				<td><%=post.getPost_id()%>&nbsp; <%=post.getPost_content()%></td>
 				<td><%=post.getTimestamp()%></td>
-				<td>tbc</td>
+				<td>tbc</td></tr>
 
 
-			</tr>
-			<%
-				}
-				} // end for
-			%>
+					</tbody>
 
 
-		</table>
 
 
+					<%
+							}} // end for
+					%>
+
+
+				</table>
+			</div>
+		</div>
 
 	</div>
 

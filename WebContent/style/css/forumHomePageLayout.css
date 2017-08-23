@@ -2,7 +2,7 @@
 
 div.scroll {
 	width: 1000px;
-	height: 450px;
+	height: 420px;
 	overflow: scroll;
 	border: 2px solid #E5E7E9;
 	overflow-x: hidden;

@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page import = "java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.AuthenticationCode, dao.AuthenticationCodeDAO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
@@ -85,5 +85,19 @@
 	<script src="style/js/bootstrap.min.js"></script>
 <%@ include file = "footer.jsp" %>
 </body>
+<%@include file="login_forum.jsp"%>
+<script>
+var username;
+var password;
 
+window.onload = function(){
+	var nfuUser = '${user}';
+	
+	if(!!nfuUser){
+		username = '${user.username}';
+		password = '${user.password}';
+	}
+}
+
+</script>
 </html>

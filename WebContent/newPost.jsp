@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page
   import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -65,8 +65,7 @@
     <div class="form-group row">
       <label for="inputEmail3" class="col-sm-2 col-form-label"><strong>Post Content</strong></label>
       <div class="col-sm-9">
-        <textarea  name="postContent" class="form-control" id="inputEmail3" placeholder = "Enter your post content">
-						</textarea>
+        <textarea  name="postContent" class="form-control" id="inputEmail3" placeholder = "Enter your post content"></textarea>
       </div>
     </div>
     

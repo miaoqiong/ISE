@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page
 	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -99,12 +99,12 @@
 						<tr>
 							<th><%=post.getAvatar_id()%></th>
 							<td><a
-								href="viewPost.jsp?parent_id=<%=post.getParent_id()%>"><%=post.getPost_title()%></a></td>
+								href="viewPost.jsp?post_id=<%=post.getPost_id()%>"><%=post.getPost_title()%></a></td>
 							<td>20</td>
 							<td>20/20</td>
 							<td><%=post.getTimestamp()%></td>
 							<td><a
-								href="replyToPost.jsp?parent_id=<%=post.getParent_id()%>">Reply</a></td>
+								href="replyToPost.jsp?post_id=<%=post.getPost_id()%>">Reply</a></td>
 
 						</tr>
 
