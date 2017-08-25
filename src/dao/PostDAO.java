@@ -17,7 +17,7 @@ public class PostDAO {
 		public static void main(String[] args){
 			System.out.println("ssss");
 			PostDAO pd = new PostDAO();
-			HashMap<Integer, Post> map = pd.retrieveAPost(1) ;
+			HashMap<Integer, Post> map = pd.searchByKeyword("s") ;
 		  //  System.out.println(map.size());
 			for (Integer key : map.keySet()) {
 			    System.out.println(key + " " + map.get(key) + " " +map.get(key).getAvatar_id() +"   "+ map.get(key).getPost_id()+ " " +map.get(key).getPost_content());
@@ -25,11 +25,7 @@ public class PostDAO {
 			
 			System.out.println(pd.lastPostID(1));
 			
-			int avatar_id = 1;
-			int post_id = 7;
-			String post_title = "post title 23 Aug";
-			String post_content = "post content 23 Aug";
-			pd.replyToPost(avatar_id, post_id,post_title, post_content);
+			
 
 		}
 	
@@ -325,5 +321,60 @@ public class PostDAO {
 		java.util.Date today = new java.util.Date();
 		return new java.sql.Timestamp(today.getTime());
 	  }	
+	   
+	   // for search function 
+	   public HashMap<Integer, Post> searchByKeyword(String searchText) {
+	        HashMap<Integer, Post> postMap = new HashMap<>();
+
+	        Connection conn = null;
+	        ResultSet rs = null;
+	        PreparedStatement preStmt = null;
+	        Post tempPost = null;
+	        try {
+	            conn = ConnectionManager.getConnection();
+	            String sql = "select * from " + TBLNAME + " where post_title like concat('%',?,'%') or post_content like concat('%',?,'%')";
+
+	            preStmt = conn.prepareStatement(sql);
+	            preStmt.setString(1, searchText);
+	            preStmt.setString(2, searchText);
+	            rs = preStmt.executeQuery();
+
+	            while (rs.next()) {
+	            	int avatar_id = rs.getInt(1);
+	            	int parent_id = rs.getInt(2);
+	            	int level = rs.getInt(3);
+	            	int post_id = rs.getInt(4);
+	            	String post_title = rs.getString(5);
+	            	String post_content = rs.getString(6);
+	            	boolean is_question = rs.getBoolean(7);
+	            	boolean is_bot = rs.getBoolean(8);
+	            	boolean is_qa_bountiful = rs.getBoolean(9);
+	            	String timestamp = rs.getString(10);
+	            	int time_limit_qa = rs.getInt(11);
+	            	int time_limit_bot = rs.getInt(12);
+	            	float qa_coin_basic = rs.getFloat(13);
+	            	float qa_coin_bounty = rs.getFloat(14);
+	            	float thoughfulness_score = rs.getFloat(15);
+	            	boolean no_show = rs.getBoolean(16);
+	            	int previous_version = rs.getInt(17);
+	            	int number_of_upvotes = rs.getInt(18);
+	            	int number_of_downvotes = rs.getInt(19);
+
+	             
+	            	tempPost = new Post(avatar_id, parent_id, level, post_id, post_title, post_content, is_question, is_bot, is_qa_bountiful, timestamp, time_limit_qa, time_limit_bot, qa_coin_basic, qa_coin_bounty, thoughfulness_score,
+	            		 no_show, previous_version, number_of_upvotes, number_of_downvotes);
+	            	
+	            	       
+	                postMap.put(post_id, tempPost);
+	           
+	                
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            ConnectionManager.close(conn, preStmt, rs);
+	            return postMap;
+	        }
+	    }
 
 }

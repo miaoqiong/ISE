@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.PostDAO;
+import entity.Professor;
 import entity.Student;
 
 /**
@@ -32,12 +33,24 @@ public class PostNewQuestion extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//HttpSession session = request.getSession();
-		//Student student = (Student)session.getAttribute("user");
-		//int avatar_id = student.getAvatar_id();
-		int avatar_id = 1;
+		HttpSession session = request.getSession();
+		Student student = (Student)session.getAttribute("student");
+		Professor professor = (Professor)session.getAttribute("professor");
+		int avatar_id=0;
+		if(student != null){
+			avatar_id = student.getAvatar_id();
+			System.out.println(avatar_id);
+		}
+		
+		if(professor != null){
+			avatar_id = professor.getAvatar_id();
+			System.out.println(avatar_id);
+		}
+		
+		//int avatar_id = 1;
 		String post_title =  request.getParameter("postTitle");
 		String post_content =  request.getParameter("postContent");
+		//String post_tag[] =  request.getParameterValues("tag");
 		PostDAO postDAO = new PostDAO();
 		
 		String errorMsg = "";

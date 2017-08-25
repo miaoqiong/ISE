@@ -1,6 +1,6 @@
 <%@include file="protect.jsp"%>
 <%@ page
-	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
+	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.AvatarDAO,dao.PostDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
 <head>
@@ -42,6 +42,7 @@
 	<%
 		PostDAO pd = new PostDAO();
 		HashMap<Integer, Post> map = pd.retrieveAll();
+		AvatarDAO avatarDAO= new AvatarDAO();
 	%>
 	<div style="margin-top: 2%"></div>
 	<div class="container text-center">
@@ -59,21 +60,29 @@
 
 		<div class="col-12 col-md-auto">
 
+
+
+
 			<div class="row">
-				<div class="col-3">
-					<a class="btn btn-primary" style="width: 12rem" href="newPost.jsp"><b>Post
-							a New Question</b></a>
+
+				<div class="col-2">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<a class="btn btn-outline-primary" style="width: 12rem; height: 2.4rem"
+							href="newPost.jsp"><b>Post a New Question</b></a>
+						<form method="post" action="searchResults.jsp">
+							<div class="input-group">
+								<input type="text" style="width: 14rem" class="form-control"
+									name= "searchText" placeholder="Search for..."> <span
+									class="input-group-btn">
+									<button class="btn btn-secondary" type="submit">Go!</button>
+								</span>
+
+							</div>
+						</form>
+					</div>
+
 				</div>
 
-				<div class="col flex-unordered">
-					<div class="input-group">
-						<input type="text" class="form-control"
-							placeholder="Search for..."> <span
-							class="input-group-btn">
-							<button class="btn btn-secondary" type="button">Go!</button>
-						</span>
-					</div>
-				</div>
 			</div>
 			<div class="scroll">
 
@@ -81,12 +90,12 @@
 					<thead class="thead-default">
 
 						<tr>
-							<th>Avatar Name</th>
+							<th width="15%">Avatar Name</th>
 							<th>Post Title</th>
 							<th>QA Coins</th>
 							<th>Votes</th>
-							<th>Datetime</th>
-							<th>Editing Options</th>
+							<th width="13%">Datetime</th>
+							<th>Actions</th>
 
 						</tr>
 						<%
@@ -97,14 +106,12 @@
 					<tbody>
 
 						<tr>
-							<th><%=post.getAvatar_id()%></th>
-							<td><a
-								href="viewPost.jsp?post_id=<%=post.getPost_id()%>"><%=post.getPost_title()%></a></td>
+							<th><%=avatarDAO.getAvatarName(post.getAvatar_id())%></th>
+							<td><a href="viewPost.jsp?post_id=<%=post.getPost_id()%>"><%=post.getPost_title()%></a></td>
 							<td>20</td>
 							<td>20/20</td>
 							<td><%=post.getTimestamp()%></td>
-							<td><a
-								href="replyToPost.jsp?post_id=<%=post.getPost_id()%>">Reply</a></td>
+							<td><a href="replyToPost.jsp?post_id=<%=post.getPost_id()%>">Reply</a></td>
 
 						</tr>
 

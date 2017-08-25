@@ -30,7 +30,20 @@ public class ReplyToPost extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int avatar_id = 1;
+		HttpSession session = request.getSession();
+		Student student = (Student)session.getAttribute("student");
+		Professor professor = (Professor)session.getAttribute("professor");
+		int avatar_id=0;
+		if(student != null){
+			avatar_id = student.getAvatar_id();
+			System.out.println(avatar_id);
+		}
+		
+		if(professor != null){
+			avatar_id = professor.getAvatar_id();
+			System.out.println(avatar_id);
+		}
+		
 		String tempPostID = (String)request.getParameter("postID");
 		int post_id = Integer.parseInt(tempPostID);
 		String tempPostTitle = request.getParameter("postTitle");

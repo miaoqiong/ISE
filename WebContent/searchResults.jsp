@@ -41,30 +41,38 @@
 
 
 	<%
-		String tempID = request.getParameter("post_id");
-		System.out.println(tempID);
-		int postID = Integer.parseInt(tempID);
-        
-		AvatarDAO avatarDAO= new AvatarDAO();
-		PostDAO pd = new PostDAO();
-		// retrieve all posts that have same parent ID
-		HashMap<Integer, Post> map = pd.retrieveAPost(postID);
+		String msg = "";
+		String searchText = request.getParameter("searchText").trim();
 
-		Post parentPost = pd.retrieveParentPost(postID);
+		AvatarDAO avatarDAO = new AvatarDAO();
+		PostDAO postDAO = new PostDAO();
+		HashMap<Integer, Post> returnSearchResults = postDAO.searchByKeyword(searchText);
+
+		if (returnSearchResults == null || returnSearchResults.size() == 0) {
+			msg = "Your search for " + searchText + " did not match any records";
+			System.out.println(msg);
+		}
 	%>
 	<div style="margin-top: 2%"></div>
 	<div class="container text-center">
 		<header>
-			<h2>
-				View Post:
-				<%=parentPost.getPost_title()%></h2>
+			<h2>Search Results:</h2>
 			<hr>
-
 		</header>
 	</div>
 
 	<div class="row justify-content-md-center">
-
+		<%
+			if (msg != null && msg.length() > 0) {
+				out.println("<div class='container' align='center' style='padding:0px;height:40px'>");
+				out.println("<div class='alert alert-warning' style='width:400px'>");
+				out.println("<font color='red'>");
+				out.println(msg);
+				out.println("</font>");
+				out.println("</div>");
+				out.println("</div><br>	");
+			}
+		%>
 
 		<div class="col-12 col-md-auto">
 
@@ -73,52 +81,41 @@
 				<div class="col-2">
 					<div class="btn-group" role="group" aria-label="Basic example">
 						<a class="btn btn-outline-primary" style="width: 10rem"
-							href="forumHome.jsp"><b>Back to Forum </b></a> <a
-							class="btn btn-outline-primary" style="width: 5rem"
-							href="replyToPost.jsp?post_id=<%=parentPost.getPost_id()%>"><b>Reply</b></a>
-
+							href="forumHome.jsp"><b>Back to Forum </b></a>
 					</div>
 
 				</div>
 
 			</div>
-			<div class="scroll">
 
+			<div class="scroll">
 				<table class="table table-bordered">
 					<thead class="thead-default">
-
 						<tr>
+
 							<th width="15%" align="center">Avatar Name</th>
-							<th width="57%" align="center">Post Content</th>
-							<th width="13%" align="center">Datetime</th>
-							<th width="15%" align="center">Actions</th>
+							<th width="20%" align="center">Post Title</th>
+							<th width="52%" align="center">Post Content</th>
+							<th width="13%" align="center">DateTime</th>
+
 
 						</tr>
-						<tr class="table-warning">
-						
-								<td><%=avatarDAO.getAvatarName(parentPost.getAvatar_id())%></td>
-							<td><%=parentPost.getPost_content()%></td>
-							<td><%=parentPost.getTimestamp()%></td>
-							<td>tbc</td>
-
-						</tr>
-
-
 						<%
-							for (Integer key : map.keySet()) {
-								Post post = map.get(key);
-
-								if (post.isIs_question() == false) {
+							if (returnSearchResults != null && returnSearchResults.size() != 0) {
+								for (Integer key : returnSearchResults.keySet()) {
+									Post post = returnSearchResults.get(key);
 						%>
 					</thead>
 					<tbody>
 
 						<tr>
-				
+
 							<td><%=avatarDAO.getAvatarName(post.getAvatar_id())%></td>
-							<td><%=post.getPost_id()%>&nbsp; <%=post.getPost_content()%></td>
+							<td><a href="viewPost.jsp?post_id=<%=post.getPost_id()%>"><%=post.getPost_title()%></a></td>
+
+							<td><%=post.getPost_content()%></td>
 							<td><%=post.getTimestamp()%></td>
-							<td>tbc</td>
+
 						</tr>
 
 
@@ -130,6 +127,7 @@
 					<%
 						}
 						} // end for
+						session.removeAttribute("searchResults");
 					%>
 
 
@@ -143,6 +141,7 @@
 		src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="style/js/jquery-3.2.1.min.js"></script>
 	<script src="style/js/bootstrap.min.js"></script>
+
 	<%@ include file="footer.jsp"%>
 </body>
 
