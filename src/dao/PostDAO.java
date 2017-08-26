@@ -1,10 +1,13 @@
 package dao;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,13 +22,22 @@ public class PostDAO {
 			PostDAO pd = new PostDAO();
 			HashMap<Integer, Post> map = pd.searchByKeyword("s") ;
 		  //  System.out.println(map.size());
-			for (Integer key : map.keySet()) {
+	/*		for (Integer key : map.keySet()) {
 			    System.out.println(key + " " + map.get(key) + " " +map.get(key).getAvatar_id() +"   "+ map.get(key).getPost_id()+ " " +map.get(key).getPost_content());
 			}
 			
 			System.out.println(pd.lastPostID(1));
 			
 			
+			System.out.println(pd.lastPostIDofAvatar(2));
+			System.out.println(pd.lastPostIDofAvatar(1));
+	*/		
+			List<Integer> tempList = pd.retrieveAllPosts(2);
+			for(Integer i: tempList){
+				
+			
+			System.out.println(pd.retrievePostbyID(i).getPost_title());
+			}
 
 		}
 	
@@ -90,8 +102,9 @@ public class PostDAO {
 	            e.printStackTrace();
 	        } finally {
 	            ConnectionManager.close(conn, preStmt, rs);
-	            return postMap;
+	            
 	        }
+	        return postMap;
 	    }
 	    
 	    // retrieve parent post and its subpost (if any) -> for viewPost.jsp
@@ -143,8 +156,9 @@ public class PostDAO {
 	            e.printStackTrace();
 	        } finally {
 	            ConnectionManager.close(conn, preStmt, rs);
-	            return postMap;
+	            
 	        }
+	        return postMap;
 	    }
 	    
 	    // retrieve Parent post -> for viewPost.jsp	    
@@ -159,6 +173,58 @@ public class PostDAO {
 	            conn = ConnectionManager.getConnection();
 
 	            sql = "select * from " + TBLNAME + " where post_id = ? and is_question=1";
+	            stmt = conn.prepareStatement(sql);	
+	            stmt.setInt(1, postID);
+	            
+	            rs = stmt.executeQuery();
+
+	            while (rs.next()) {
+	            	int avatar_id = rs.getInt(1);
+	            	int parent_id = rs.getInt(2);
+	            	int level = rs.getInt(3);
+	            	int post_id = rs.getInt(4);
+	            	String post_title = rs.getString(5);
+	            	String post_content = rs.getString(6);
+	            	boolean is_question = rs.getBoolean(7);
+	            	boolean is_bot = rs.getBoolean(8);
+	            	boolean is_qa_bountiful = rs.getBoolean(9);
+	            	String timestamp = rs.getString(10);
+	            	int time_limit_qa = rs.getInt(11);
+	            	int time_limit_bot = rs.getInt(12);
+	            	float qa_coin_basic = rs.getFloat(13);
+	            	float qa_coin_bounty = rs.getFloat(14);
+	            	float thoughfulness_score = rs.getFloat(15);
+	            	boolean no_show = rs.getBoolean(16);
+	            	int previous_version = rs.getInt(17);
+	            	int number_of_upvotes = rs.getInt(18);
+	            	int number_of_downvotes = rs.getInt(19);
+
+	             
+	            	returnPost = new Post(avatar_id, parent_id, level, post_id, post_title, post_content, is_question, is_bot, is_qa_bountiful, timestamp, time_limit_qa, time_limit_bot, qa_coin_basic, qa_coin_bounty, thoughfulness_score,
+	            		 no_show, previous_version, number_of_upvotes, number_of_downvotes);
+	            }
+	            //return resultUser;
+
+	        } catch (SQLException ex) {
+	            handleSQLException(ex, sql, "Post={" + returnPost + "}");
+	        } finally {
+	            ConnectionManager.close(conn, stmt, rs);
+	        }
+	        return returnPost;
+	    }
+	    
+	 // retrieve all posts -> for viewYourPost.jsp	    
+	    public Post retrievePostbyID(int postID) {
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        String sql = "";
+	        Post returnPost = null;
+	        ResultSet rs = null;
+
+	        try {
+	            conn = ConnectionManager.getConnection();
+
+	            sql = "select * from " + TBLNAME + " where post_id = ?";
 	            stmt = conn.prepareStatement(sql);	
 	            stmt.setInt(1, postID);
 	            
@@ -229,6 +295,38 @@ public class PostDAO {
         }
         return returnPostID;
     }
+	    
+	    // get avatarID's last post
+	    public int lastPostIDofAvatar(int avatarID){
+		    Connection conn = null;
+	        PreparedStatement stmt = null;
+	        String sql = "";
+	        Integer returnPostID = null;
+	        ResultSet rs = null;
+
+	        try {
+	            conn = ConnectionManager.getConnection();
+
+	            sql = "select MAX(post_id) FROM " + TBLNAME + " where avatar_id = ?";
+	            stmt = conn.prepareStatement(sql);	         
+	            stmt.setInt(1, avatarID);
+	            
+	            rs = stmt.executeQuery();
+
+	            while (rs.next()) {            	
+	            	returnPostID = rs.getInt(1);
+	             
+	            	
+	            }
+	            //return resultUser;
+
+	        } catch (SQLException ex) {
+	            handleSQLException(ex, sql, "PostID={" + returnPostID + "}");
+	        } finally {
+	            ConnectionManager.close(conn, stmt, rs);
+	        }
+	        return returnPostID;
+	    }
 	    
 	   public void addNewPost(int avatar_id, String post_title, String post_content){
 	   
@@ -373,8 +471,43 @@ public class PostDAO {
 	            e.printStackTrace();
 	        } finally {
 	            ConnectionManager.close(conn, preStmt, rs);
-	            return postMap;
+	            
 	        }
+	        return postMap;
+	    }
+	   
+	// get all posts by avatar_id , viewYourPosts.jsp
+	    public List<Integer> retrieveAllPosts(int avatarID){
+	    	List<Integer> returnList = new ArrayList<>();
+		    Connection conn = null;
+	        PreparedStatement stmt = null;
+	        String sql = "";
+	        Integer returnPostID = null;
+	        ResultSet rs = null;
+
+	        try {
+	            conn = ConnectionManager.getConnection();
+
+	            sql = "select (post_id) FROM " + TBLNAME + " where avatar_id = ?";
+	            stmt = conn.prepareStatement(sql);	         
+	            stmt.setInt(1, avatarID);
+	            
+	            rs = stmt.executeQuery();
+
+	            while (rs.next()) {            	
+	            	returnPostID = rs.getInt(1);
+	            	returnList.add(returnPostID);
+	             
+	            	
+	            }
+	            //return resultUser;
+
+	        } catch (SQLException ex) {
+	            handleSQLException(ex, sql, "PostID={" + returnPostID + "}");
+	        } finally {
+	            ConnectionManager.close(conn, stmt, rs);
+	        }
+	        return returnList;
 	    }
 
 }

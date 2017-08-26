@@ -89,9 +89,9 @@
 
 						<tr>
 							<th width="15%" align="center">Avatar Name</th>
-							<th width="57%" align="center">Post Content</th>
-							<th width="13%" align="center">Datetime</th>
-							<th width="15%" align="center">Actions</th>
+							<th width="58%" align="center">Post Content</th>
+							<th width="11%" align="center">Datetime</th>
+							<th width="14%" align="center">Vote</th>
 
 						</tr>
 						<tr class="table-warning">
@@ -99,7 +99,9 @@
 								<td><%=avatarDAO.getAvatarName(parentPost.getAvatar_id())%></td>
 							<td><%=parentPost.getPost_content()%></td>
 							<td><%=parentPost.getTimestamp()%></td>
-							<td>tbc</td>
+							<td>
+							<form method="post" action="ServletName"><button type="button" class="btn btn-primary btn-sm" id="up">Like</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="down">Dislike</button></form></td>
 
 						</tr>
 
@@ -118,7 +120,8 @@
 							<td><%=avatarDAO.getAvatarName(post.getAvatar_id())%></td>
 							<td><%=post.getPost_id()%>&nbsp; <%=post.getPost_content()%></td>
 							<td><%=post.getTimestamp()%></td>
-							<td>tbc</td>
+							<td><button type="button" class="btn btn-primary btn-sm"id="up">Like</button>
+                            <button type="button" class="btn btn-primary btn-sm"id="down">Dislike</button></td>
 						</tr>
 
 

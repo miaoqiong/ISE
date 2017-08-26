@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.PostDAO;
+import dao.TagDAO;
 import entity.Professor;
 import entity.Student;
 
@@ -50,12 +51,28 @@ public class PostNewQuestion extends HttpServlet {
 		//int avatar_id = 1;
 		String post_title =  request.getParameter("postTitle");
 		String post_content =  request.getParameter("postContent");
-		//String post_tag[] =  request.getParameterValues("tag");
+		String[] post_tag =  request.getParameterValues("tag");
+		
+		if(post_tag != null){
+			for(int i =0; i < post_tag.length; i++){
+				System.out.println("************* "+post_tag[i]);
+			}
+		}
+		
+		
+		
 		PostDAO postDAO = new PostDAO();
+		TagDAO tagDAO = new TagDAO();
 		
 		String errorMsg = "";
 		if(post_title.isEmpty()||post_title == null){
 			errorMsg = "The post title cannot be empty!";
+			RequestDispatcher rd = request.getRequestDispatcher("newPost.jsp");
+			request.setAttribute("newPostMsg", errorMsg);
+			rd.forward(request, response);
+			return;
+		}else if(post_tag == null){
+			errorMsg = "The post tag cannot be empty!";
 			RequestDispatcher rd = request.getRequestDispatcher("newPost.jsp");
 			request.setAttribute("newPostMsg", errorMsg);
 			rd.forward(request, response);
@@ -68,6 +85,7 @@ public class PostNewQuestion extends HttpServlet {
 			return;
 		}else{
 			postDAO.addNewPost(avatar_id, post_title, post_content);
+			tagDAO.addTag(postDAO.lastPostIDofAvatar(avatar_id), post_tag);
 			RequestDispatcher rd = request.getRequestDispatcher("forumHome.jsp");
 			rd.forward(request, response);
 			return;

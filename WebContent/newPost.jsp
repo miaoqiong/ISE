@@ -1,6 +1,6 @@
 <%@include file="protect.jsp"%>
 <%@ page
-	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.PostDAO"%>
+	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.*, dao.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
 <head>
@@ -83,47 +83,20 @@
 					<div class="form-group row">
 						<label for="inputEmail3" class="col-sm-2 col-form-label"><strong>Tag</strong></label>
 						<div class="col-sm-9">
-							<label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Countif"> Countif
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="Index"> Index
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Lookup"> Lookup
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Match"> Match
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="Norm.dist"> Norm.dist
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Norminv"> Norminv
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Offset"> Offset
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="PivotTable"> Pivot table
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Round"> Round
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Slope"> Slope
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="Small"> Small
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Solver"> Solver
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Sqrt"> Sqrt
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="Stdev"> Stdev
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Substitute"> Substitute
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Sumproduct"> Sumproduct
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="Sumsq"> Sumsq
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox3" value="Time"> Time
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox1" value="Vlookup"> Vlookup
-							</label> <label class="checkbox-inline"> <input type="checkbox" name="tag"
-								id="inlineCheckbox2" value="option2"> Ztest
-							</label>
+						<%
+						
+						    TagDAO tagDAO = new TagDAO();
+							List<Tag> tagList = tagDAO.retrieveAllTags();
+							Tag tempTag = null;
+							for(int i=0; i<tagList.size(); i++){	
+								tempTag = tagList.get(i);
+								out.println("<label class='checkbox-inline'> <input type='checkbox' name='tag' id='inlineCheckbox1' value='"
+								+tempTag.getTag()+"'>"
+								+tempTag.getTag()+"</label>");
+							}
+								
+						%>
+							
 						</div>
 					</div>
 

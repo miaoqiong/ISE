@@ -1,6 +1,6 @@
 <%@include file="protect.jsp"%>
 <%@ page
-	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Post, dao.AvatarDAO,dao.PostDAO"%>
+	import="java.io.*,java.util.*, java.util.concurrent.*, utility.*, entity.Professor, dao.SummaryDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
 <head>
@@ -40,47 +40,26 @@
 
 
 	<%
-		PostDAO pd = new PostDAO();
-		HashMap<Integer, Post> map = pd.retrieveAll();
-		AvatarDAO avatarDAO= new AvatarDAO();
+	    Professor professor = (Professor)session.getAttribute("professor");
+		int avatar_id = professor.getAvatar_id();
+		SummaryDAO sdao = new SummaryDAO();
+		HashMap<Integer, String> map = sdao.retrieveByAvatar(avatar_id);
 	%>
+	
 	<div style="margin-top: 2%"></div>
-	<div class="container text-center">
-		<header>
-			<h2>CAT Forum</h2>
-			<hr>
-		</header>
-
-
-	</div>
-
 
 	<div class="row justify-content-md-center">
 
-
 		<div class="col-12 col-md-auto">
-
-
-
 
 			<div class="row">
 
-				<div class="col-2">
+				<div class="col-12">
+					<a style="width: 12rem; height: 2.4rem" href="#"><b>View All Post Class Summary</b></a>
 					<div class="btn-group" role="group" aria-label="Basic example">
-						<a class="btn btn-outline-primary" style="width: 12rem; height: 2.4rem"
-							href="newPost.jsp"><b>Post a New Question</b></a>
-						<form method="post" action="searchResults.jsp">
-							<div class="input-group">
-								<input type="text" style="width: 14rem" class="form-control"
-									name= "searchText" placeholder="Search for..."> <span
-									class="input-group-btn">
-									<button class="btn btn-secondary" type="submit">Go!</button>
-								</span>
-
-							</div>
-						</form>
+						<a class="btn btn-outline-primary" style="width: 13rem; height: 2.4rem"
+							href="#"><b>Add New Question</b></a>	
 					</div>
-
 				</div>
 
 			</div>
@@ -88,32 +67,26 @@
 
 				<table class="table table-bordered">
 					<thead class="thead-default">
-
+						
 						<tr>
-							<th width="15%">Avatar Name</th>
-							<th>Post Title</th>
-							<th width="10%">QA Coins</th>
-							<th width="5%">Votes</th>
-							<th width="11%">Datetime</th>
-							<th>Actions</th>
+							<th>No</th>
+							<th>Question</th>
+							<th colspan='3'>Actions</th>
 
 						</tr>
 						<%
+							int no = 1;
 							for (Integer key : map.keySet()) {
-								Post post = map.get(key);
+								 String question = map.get(key);
 						%>
 					</thead>
 					<tbody>
 
 						<tr>
-							<th><a href="viewYourPosts.jsp?avatar_id=<%=post.getAvatar_id()%>"><%=avatarDAO.getAvatarName(post.getAvatar_id())%></a></th>
-							<td><a href="viewPost.jsp?post_id=<%=post.getPost_id()%>"><%=post.getPost_title()%></a></td>
-							<td>20</td>
-							<td>20/20</td>
-							<td><%=post.getTimestamp()%></td>
-							<td><a href="replyToPost.jsp?post_id=<%=post.getPost_id()%>">Reply</a>
-							</td>
-
+							<th><%=no++%></th>
+							<td><%=question%></td>
+							<td ><a href="#">Edit</a></td>
+							<td ><a href="deleteSummaryQuestion.jsp?q_id=<%=key%>">Delete</a></td>
 						</tr>
 
 
@@ -130,41 +103,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="col col-lg-2">
-			.
-			<table class="table table-bordered">
-				<thead class="thead-default">
-					<tr>
-						<th>will add topic and avatar content</th>
-
-
-
-					</tr>
-					<%
-						for (Integer key : map.keySet()) {
-							Post post = map.get(key);
-					%>
-				</thead>
-				<tbody>
-
-					<tr>
-						<th><%=post.getAvatar_id()%></th>
-					</tr>
-
-
-				</tbody>
-
-
-
-
-				<%
-					} // end for
-				%>
-
-
-			</table>
-		</div>
-	</div>
+		
 	<div class="col-8"></div>
 
 
