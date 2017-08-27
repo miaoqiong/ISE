@@ -1,4 +1,4 @@
-<!--<%@include file="protect.jsp"%>-->
+<%@include file="protect.jsp"%>
 <%@ page import = "java.io.*,java.util.*, utility.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
@@ -26,7 +26,8 @@
 			<a class="navbar-brand" href="home.jsp">IS102</a>
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 				<li class="nav-item"><a class="nav-link" href="attendance.jsp">Attendance</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Post-class Summary</a></li>
+					<li class="nav-item"><a class="nav-link" href="viewSummary.jsp">Post-class
+						Summary</a></li>
 				<li class="nav-item"><a class="nav-link" href="consultation.jsp">Consultation</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
 				<li class="nav-item"><a class="nav-link" href="javascript:logInForum()" id="forum">Forum</a></li>

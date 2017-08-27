@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="style/css/bootstrap.min.css">
 <link rel="stylesheet" href="style/css/font-awesome.min.css">
+<link rel="stylesheet" href="style/css/forumHomePageLayout.css">
 </head>
 <body>
 	<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
@@ -26,11 +27,23 @@
 			</ul>
 		</div>
 	</nav>
+		<div style="margin-top: 2%"></div>
+	<div class="container text-center">
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script src="style/js/jquery-3.2.1.min.js"></script>
-<script src="style/js/bootstrap.min.js"></script>
-<%@ include file = "footer.jsp" %>
+		<div class="viewPostBoarder">
+
+			<div class="container">
+			<h1>Welcome to IS102 CAT Platform</h1>
+
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+	<script src="style/js/jquery-3.2.1.min.js"></script>
+	<script src="style/js/bootstrap.min.js"></script>
+	<%@ include file = "footer.jsp" %>
 </body>
 
 </html>

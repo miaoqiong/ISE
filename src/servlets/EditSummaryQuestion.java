@@ -1,37 +1,29 @@
 package servlets;
 
-
-import java.io.*;
-import dao.*;
-import entity.*;
-
-import javax.servlet.RequestDispatcher;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.SummaryDAO;
+import entity.Professor;
+
 /**
- * Servlet implementation class Authenticate
+ * Servlet implementation class EditSummaryQuestion
  */
-@WebServlet("/ServletName")
-public class ServletName extends HttpServlet {
+@WebServlet("/EditSummaryQuestion")
+public class EditSummaryQuestion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ServletName() {
+	public EditSummaryQuestion() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
 	}
 
 	/**
@@ -41,7 +33,21 @@ public class ServletName extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		processRequest(request, response);
+		HttpSession session = request.getSession();
+
+		Professor professor = (Professor) session.getAttribute("professor");
+		int avatar_id = professor.getAvatar_id();
+
+		SummaryDAO summaryDAO = new SummaryDAO();
+
+		// direct to jsp or forward the message;
+
+		String id = request.getParameter("q_id");
+		String editedQuestion = request.getParameter("editQuestion");
+		int question_id = Integer.parseInt(id);
+		summaryDAO.updateQuestion(question_id, editedQuestion); 		
+		response.sendRedirect("viewSummary.jsp");
+
 	}
 
 	/**
@@ -53,5 +59,4 @@ public class ServletName extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

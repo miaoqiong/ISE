@@ -22,6 +22,7 @@ public class SummaryDAO {
 		}
 		sdao.updateQuestion(4,"question ba");
 		
+		System.out.println(sdao.retrieveByQID(7));
 
 	}
 
@@ -84,6 +85,33 @@ public class SummaryDAO {
             ConnectionManager.close(conn, preStmt, rs);
         }
         return summaryQuestions;
+    }
+    
+    public String retrieveByQID(int QID) {
+        String returnQ = null;
+
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement preStmt = null;
+        
+        try {
+            conn = ConnectionManager.getConnection();
+            String sql = "select question from " + TBLNAME +" where question_id = ?";
+            preStmt = conn.prepareStatement(sql);
+            preStmt.setInt(1, QID);
+            rs = preStmt.executeQuery();
+
+            while (rs.next()) {
+            	returnQ = rs.getString("question");
+            	
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionManager.close(conn, preStmt, rs);
+        }
+        return returnQ;
     }
     
     public void deleteQuestion (int question_id){

@@ -10,40 +10,56 @@ import javax.servlet.http.HttpSession;
 
 import dao.SummaryDAO;
 import entity.Professor;
+
 /**
  * Servlet implementation class AddNewSummaryQuestion
  */
 @WebServlet("/AddNewSummaryQuestion")
 public class AddNewSummaryQuestion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AddNewSummaryQuestion() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		String summaryQuestion = (String)session.getAttribute("summaryQuestion");
-		Professor professor = (Professor)session.getAttribute("professor");
-		int avatar_id = professor.getAvatar_id();
-		
-		SummaryDAO summaryDAO = new SummaryDAO();
-		summaryDAO.addQuestion(summaryQuestion,avatar_id);
-		//direct to jsp or forward the message;
+	public AddNewSummaryQuestion() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session = request.getSession();
+
+		Professor professor = (Professor) session.getAttribute("professor");
+		int avatar_id = professor.getAvatar_id();
+
+		SummaryDAO summaryDAO = new SummaryDAO();
+
+		// direct to jsp or forward the message;
+
+		for (int i = 1; i < 6; i++) {
+			String summaryQuestion = request.getParameter("dyTextField" + i);
+			if (summaryQuestion != null) {
+				// System.out.println(i+a);
+				summaryDAO.addQuestion(summaryQuestion, avatar_id);
+			}
+
+		}
+		response.sendRedirect("viewSummary.jsp");
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

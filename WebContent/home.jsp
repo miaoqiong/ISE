@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="style/css/bootstrap.min.css">
 <link rel="stylesheet" href="style/css/font-awesome.min.css">
+<link rel="stylesheet" href="style/css/forumHomePageLayout.css">
 </head>
 <body>
 	<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
@@ -21,7 +22,8 @@
 			<a class="navbar-brand" href="home.jsp">IS102</a>
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 				<li class="nav-item"><a class="nav-link" href="attendance.jsp">Attendance</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Post-class Summary</a></li>
+				<li class="nav-item"><a class="nav-link" href="viewSummary.jsp">Post-class
+						Summary</a></li>
 				<li class="nav-item"><a class="nav-link" href="consultation.jsp">Consultation</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>				
 				<li class="nav-item"><a class="nav-link" href="forumHome.jsp" >Forum</a></li>
@@ -29,10 +31,24 @@
 			</ul>
 		</div>
 	</nav>
+	<div style="margin-top: 2%"></div>
+	<div class="container text-center">
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script src="style/js/jquery-3.2.1.min.js"></script>
-<script src="style/js/bootstrap.min.js"></script>
+		<div class="viewPostBoarder">
+
+			<div class="container">
+			<h1>Welcome to IS102 CAT Platform</h1>
+
+			</div>
+		</div>
+	</div>
+	
+
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+	<script src="style/js/jquery-3.2.1.min.js"></script>
+	<script src="style/js/bootstrap.min.js"></script>
+	<%@ include file="footer.jsp"%>
 
 </body>
 

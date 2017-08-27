@@ -100,8 +100,8 @@
 							<td><%=parentPost.getPost_content()%></td>
 							<td><%=parentPost.getTimestamp()%></td>
 							<td>
-							<form method="post" action="ServletName"><button type="button" class="btn btn-primary btn-sm" id="up">Like</button>
-                            <button type="button" class="btn btn-primary btn-sm" id="down">Dislike</button></form></td>
+							<button type="submit" class="btn btn-primary btn-sm" id="up">Like</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="down">Dislike</button></td>
 
 						</tr>
 
@@ -146,6 +146,8 @@
 		src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="style/js/jquery-3.2.1.min.js"></script>
 	<script src="style/js/bootstrap.min.js"></script>
+	<script>
+	</script>
 	<%@ include file="footer.jsp"%>
 </body>
 
